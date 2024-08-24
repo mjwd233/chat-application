@@ -1,116 +1,82 @@
-import React, { useState, useEffect } from "react";
-import {
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
-import { auth } from "../firebaseconfig";
-import { firestore } from "../firebaseconfig";
-import { doc, setDoc ,getDoc} from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
+import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../components/UserContext';
-import { uploadPhotoAndUpdateProfile } from "../storage";
-
-
-
 
 const Register = () => {
-
   const defaultPhotoURL = '/images/newone.jpg';
-  const { mainuser, seTheMainUser } = useUser();// id ,photo , dispalyname
+  const { mainuser, seTheMainUser } = useUser(); // id, photo, displayName
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const navigate = useNavigate();
- 
+
   const handleSignUp = async (e) => {
+    e.preventDefault(); // Prevent form submission
+
     try {
-
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password, {
-        // Use popup mode instead of redirect
-        mode: 'popup',
+      const response = await axios.post('http://localhost:5000/api/auth/register', {
+        displayName,
+        email,
+        password,
+        photoURL: defaultPhotoURL,
       });
 
-      const downloadURL = await uploadPhotoAndUpdateProfile(defaultPhotoURL, "photos/newone.jpeg");
+      console.log('User created successfully!', response.data);
 
-     
-      onAuthStateChanged(auth, async (user) => {
+      seTheMainUser([...mainuser, {
+        id: response.data.user.id, // Use the id from the response
+        displayName: response.data.user.displayName,
+        photo: response.data.user.photoURL,
+      }]);
+  
 
-   
-        if (user) {
-        
-   
-               
-              /* if (!mainuser.find(item => item.userId)) {
-             seTheMainUser(mainuser =>[...mainuser, {userId: mainuser.map(values => values.user.uid)}])
-               }*/
-      
-          
-           const uid = mainuser.map(values => values.user).uid;
-
-       
-         
-          console.log('User created successfully!');
-          
-
-          
-          const userRef = doc(firestore, 'users', user.uid);
-          const userDoc = await getDoc(userRef);
-
-          if (userDoc.exists()) {
-            console.log('User document already exists!');
-          } else {
-            console.log('Creating new user document...');
-          await setDoc(userRef, {
-            displayName: displayName,
-            email: email,
-            password: password,
-            createdAt: new Date(),
-            photoURL: downloadURL,
-          });
-          if (!mainuser.find(item => item.displayName)) {
-          seTheMainUser(mainuser =>[...mainuser, {displayName: displayName }]) 
-          }
-          if (!mainuser.find(item => item.defaultPhotoURL)) {
-          seTheMainUser(mainuser =>[...mainuser, {photo: defaultPhotoURL }])
-          }
-        }
-          navigate("/");
-        } else {
-          // User is signed out
-        }
-      });
-     
+      navigate("/");
     } catch (error) {
-      console.error('Error creating user:', error.message);
+      console.error('Error creating user:', error.response.data);
     }
   };
- 
+
   return (
     <div className="formContainer">
       <div className="formWrapper">
         <span className="logo">Lama Chat</span>
         <span className="title">Register</span>
         <form>
-          <input required type="text" placeholder="display name" value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)} />
-          <input required type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <input required type="password" placeholder="password" value={password}
-            onChange={(e) => setPassword(e.target.value)} />
+          <span>Display Name</span>
+          <input
+            required
+            type="text"
+            placeholder="Display Name"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+          />
+          <span>Email</span>
+          <input
+            required
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <span>Password</span>
+          <input
+            required
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <input required style={{ display: "none" }} type="file" id="file" />
-
-      
-
-            <img src="" alt="" />
-            <span>Add an avatar</span>
-    
-          <button onClick={handleSignUp} >Sign up</button>
+          <img src="" alt="" />
+          <span>Add an avatar</span>
+          <button onClick={handleSignUp}>Sign up</button>
         </form>
-        <p>
-          You do have an account?
-        </p>
+        <p>You do have an account?</p>
       </div>
     </div>
   );
 };
+
 export default Register;

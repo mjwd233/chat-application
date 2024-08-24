@@ -140,3 +140,88 @@ friend.map((chat) => (
  )
 }
 export default Chats;
+
+
+/*import React, { useState, useEffect, useRef } from 'react';
+import { useUser } from '../components/UserContext';
+
+export const Chats = ({ highlightedUsers, isBlackOverlay }) => {
+  const { selectedUser, setSelectedUserfunc, friend, setFriendsInfo, setMessage, mainuser, rerender, setRender, setactuallmessageId } = useUser();
+  const mainuserRef = useRef(mainuser);
+  const clickedElementRef = useRef(null);
+
+  const toShowmessagederivedfromConversationAndSend = async (userId) => {
+    try {
+      const response = await fetch(`/api/conversations/${mainuser[0].userId}/${userId}`);
+      const data = await response.json();
+      setactuallmessageId(data.conversationId);
+      setMessage(data.messages);
+      setSelectedUserfunc(friend.find((f) => f.id === userId));
+    } catch (error) {
+      console.error(`Error fetching messages: ${error}`);
+    }
+  };
+
+  const DeleteFriendfromdatabase = async (friendId) => {
+    try {
+      await fetch(`/api/friends/${mainuser[0].userId}/${friendId}`, { method: 'DELETE' });
+      console.log(`Friend with ID ${friendId} deleted successfully`);
+      setRender(rerender + 1);
+    } catch (error) {
+      console.error(`Error deleting friend: ${error}`);
+    }
+  };
+
+  const TodisplayFriendsinChatsComponent = async (userId) => {
+    try {
+      const response = await fetch(`/api/friends/${userId}`);
+      const friendsData = await response.json();
+      setFriendsInfo(friendsData);
+      return friendsData;
+    } catch (error) {
+      console.error(`Error fetching friends: ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    if (mainuserRef.current && mainuserRef.current[0] && mainuserRef.current[0].userId) {
+      TodisplayFriendsinChatsComponent(mainuserRef.current[0].userId);
+    }
+  }, [rerender]);
+
+  return (
+    <>
+      <div className='chats'>
+        {friend ? (
+          friend.map((chat) => (
+            <div
+              className={`userChat ${isBlackOverlay && highlightedUsers.includes(chat.id) ? 'highlight' : ''}`}
+              key={chat.id}
+              ref={(element) => clickedElementRef.current = element}
+              onClick={(e) => {
+                const element = e.target;
+                if (element.classList.contains('highlight')) {
+                  DeleteFriendfromdatabase(chat.id);
+                } else {
+                  setSelectedUserfunc({
+                    id: chat.id,
+                    friendName: chat.friendName,
+                    photo: chat.photo,
+                  });
+                  toShowmessagederivedfromConversationAndSend(chat.id);
+                }
+              }}
+            >
+              <div className="userChatInfo">
+                <span>{chat.friendName} </span>
+                <img src={chat.photo} alt="" />
+              </div>
+            </div>
+          ))
+        ) : null}
+      </div>
+    </>
+  );
+};
+
+export default Chats;*/

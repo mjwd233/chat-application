@@ -51,10 +51,12 @@ const Home = () => {
           <Link to="/friends">
             <p>Friends</p>
           </Link>
-          <Link to="/chat-groups">
+          <Link to="/Test">
             <p>Chat Groups</p>
-          </Link>
-   
+          </Link> 
+          <Link to="/profilepage">
+            <p>profilepage</p>
+          </Link> 
        </div>
         <Sidebar highlightedUsers={highlightedUsers} isBlackOverlay={isBlackOverlay} />
        
@@ -74,6 +76,7 @@ const Home = () => {
     
     </div>
   );
+
 };
 
 export default Home;

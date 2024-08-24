@@ -29,10 +29,11 @@ const Message = ({message ,friendObject}) => {
                 </p>
               )}
         </div>
+
         <div className="messageContent">
         <p>{msg.text}</p> 
-     
         </div>
+
         </div>
 
     </div>

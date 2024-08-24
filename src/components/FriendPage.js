@@ -1,49 +1,134 @@
 import React from 'react';
-import styles from '../FriendPage.module.css';
+import styles from '../FriendPage.module.scss';
 
 const FriendPage = () => {
   return (
     <div className={styles.friendPage}>
-      <div className={styles.friendHeader}>
-        <div className={styles.image} />
-        <h2>Friend Name</h2>
-        <p>
-          { /* Online status */ }
-          <span className={styles.onlineStatus}>Online</span>
-          { /* or */ }
-          <span className={styles.offlineStatus}>Offline</span>
-          { /* or */ }
-          <span className={styles.idleStatus}>Idle (last seen 30 minutes ago)</span>
-        </p>
+
+
+
+
+      <div className={styles.mainuserr}>
+        <div className={styles.usercon}>
+
+          <div className={styles.imgname}>
+            <img src="images/newone.jpg" alt=""/>
+            <div className={styles.column1}>
+              <p>Main user Name</p>  
+            </div>
+          </div>
+
+          <div className={styles.buttonscontainer}>
+            <button>Back </button>
+            <button>Edit profile</button>
+            <button>Logout</button>
+          </div>
+
+        </div>
       </div>
-      <div className={styles.friendInfo}>
-        <p>Friend Bio</p>
-        <ul>
-          <li><span>Common Interests:</span> Music, Movies, Gaming</li>
-          <li><span>Location:</span> New York, USA</li>
-          <li><span>Joined:</span> 2 years ago</li>
-        </ul>
+
+
+
+
+      <div className={styles.friendcontent}>
+
+          <div className={styles.infoContent}>
+            <div className={styles.name}>
+              <img src="images/defalt.jpg"></img>
+              <p>friendName</p>
+              <strong>status</strong>
+            </div>
+            <div className={styles.removeandview}>
+              <button>Remove</button>
+              <button>View Profile</button>
+              <button>Send Message</button>
+            </div>
+          </div>
+
+
+
+          <div className={styles.infoContent}>
+            <div className={styles.name}>
+              <img src="images/defalt.jpg"></img>
+              <p>friendName</p>
+              <strong>status</strong>
+            </div>
+            <div className={styles.removeandview}>
+              <button>Remove</button>
+              <button>View Profile</button>
+              <button>Send Message</button>
+            </div>
+          </div>
+
+          <div className={styles.infoContent}>
+            <div className={styles.name}>
+              <img src="images/defalt.jpg"></img>
+              <p>friendName</p>
+              <strong>status</strong>
+            </div>
+            <div className={styles.removeandview}>
+              <button>Remove</button>
+              <button>View Profile</button>
+              <button>Send Message</button>
+          </div>
+        </div>
+
+
+        <div className={styles.infoContent}>
+            <div className={styles.name}>
+              <img src="images/defalt.jpg"></img>
+              <p>friendName</p>
+              <strong>status</strong>
+            </div>
+            <div className={styles.removeandview}>
+              <button>Remove</button>
+              <button>View Profile</button>
+              <button>Send Message</button>
+          </div>
+        </div>
+
+        <div className={styles.infoContent}>
+            <div className={styles.name}>
+              <img src="images/defalt.jpg"></img>
+              <p>friendName</p>
+              <strong>status</strong>
+            </div>
+            <div className={styles.removeandview}>
+              <button>Remove</button>
+              <button>View Profile</button>
+              <button>Send Message</button>
+          </div>
+        </div>
+
+        <div className={styles.infoContent}>
+            <div className={styles.name}>
+              <img src="images/defalt.jpg"></img>
+              <p>friendName</p>
+              <strong>status</strong>
+            </div>
+            <div className={styles.removeandview}>
+              <button>Remove</button>
+              <button>View Profile</button>
+              <button>Send Message</button>
+          </div>
+        </div>
+
+        <div className={styles.infoContent}>
+            <div className={styles.name}>
+              <img src="images/defalt.jpg"></img>
+              <p>friendName</p>
+              <strong>status</strong>
+            </div>
+            <div className={styles.removeandview}>
+              <button>Remove</button>
+              <button>View Profile</button>
+              <button>Send Message</button>
+          </div>
+        </div>
+          
+
       </div>
-      <div className={styles.friendActions}>
-        <button>Send Message</button>
-        <button>View Profile</button>
-        <button>Unfriend</button>
-      </div>
-      <div className={styles.friendPosts}>
-        <h3>Recent Posts</h3>
-        <ul>
-          <li>
-            <img src="post-image.jpg" alt="Post Image" />
-            <p>Post Text</p>
-            <span>1 hour ago</span>
-          </li>
-          <li>
-            <img src="post-image.jpg" alt="Post Image" />
-            <p>Post Text</p>
-            <span>2 hours ago</span>
-          </li>
-        </ul>
-      </div>
+
     </div>
   );
 };
