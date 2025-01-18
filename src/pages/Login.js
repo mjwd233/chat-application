@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
 import { useUser } from '../components/UserContext';
+import GoogleLoginComponent from '../components/GoogleLoginComponent';
+import FacebookSDKLoader from '../components/FacebookSDKLoader';
+import FacebookLoginButton from '../components/FacebookLoginButton';
+import axios from "axios";
 
-const Login = () => {
-  const { mainuser, seTheMainUser } = useUser();
-  console.log(mainuser);
+
+
+const Login = ({ onLogin }) => {
+  
+  const { mainuser, seTheMainUser ,socket , socketReady } = useUser();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -26,27 +32,39 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email,
-        password,
-      }, {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ email, password }),
       });
-      const user = response.data;
-      console.log("User signed in:", user);
+     
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
 
-      // Update mainuser state
-     /* seTheMainUser(mainuser => {
-        const updatedUser = { userId: user._id, displayName: user.displayName, photo: user.photoURL };
-        return mainuser.some(item => item.userId === user._id) ? mainuser : [...mainuser, updatedUser];
-      });*/
-
-      navigate("/");
+      const data = await response.json();
+     
+      let token = data.token;
+      localStorage.setItem('token', token); 
+      token = localStorage.getItem('token');
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      seTheMainUser([{
+        userId: data._id,
+        displayName: data.displayName,
+        photoURL: data.photoURL,
+      }]);
+if (socketReady && socket) {
+  socket.emit('userOnline', mainuser[0].userId);
+}
+      // Emit userOnline event after successful login
+   
+      navigate('/');
     } catch (error) {
-      console.error("Error signing in:", error.response.data);
+      console.error('Error logging in:', error);
     }
   };
 
@@ -54,6 +72,7 @@ const Login = () => {
     <>
       <div className="formContainer">
         <div className="formWrapper">
+          <FacebookSDKLoader />
           <h2>Login</h2>
           <span className="logo">Lama Chat</span>
           <span className="title">Login</span>
@@ -78,11 +97,13 @@ const Login = () => {
                 placeholder="password"
               />
             </div>
-            <Link to="/forgot-password">Forgot Password?</Link>
-            <Link to="/reset-password">Forgot Password?</Link>
+            <Link to="/forgot-password" className="forgot">Forgot Password?</Link>
             <button type="submit">Login</button>
+            
           </form>
-          <p>You don't have an account?</p>
+          <GoogleLoginComponent />
+            <FacebookLoginButton onLogin={onLogin} />
+          <p>You don&apos;t have an account? <a href="/register">Register</a></p>
         </div>
       </div>
     </>

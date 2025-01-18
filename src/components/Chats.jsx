@@ -1,182 +1,137 @@
-import React, { useState,useEffect,useRef } from 'react'
-import {  useUser } from '../components/UserContext';
-import {  doc,getDocs,collection,addDoc ,setDoc,serverTimestamp,onSnapshot, orderBy,deleteDoc,query, where ,getDoc  } from "firebase/firestore";
-import {firestore} from '../firebaseconfig'
-
-export const Chats = ({ highlightedUsers ,isBlackOverlay}) => {
-
-
- const {selectedUser,setSelectedUserfunc,friend,setFriendsInfo,setMessage, mainuser, rerender,setRender,setactuallmessageId} = useUser()
- const mainuserRef = useRef(mainuser);
-
-
- const clickedElementRef = useRef(null);
-
-
-
- 
-   //this funcitomn is done when clicking on the friend from the list to get his messages back
-   const toShowmessagederivedfromConversationAndSend = async(userId)=>{
-    //to store the conversation id 
-    let conversationsId
-  // taking a reference between the mainuser and the user  clicked to send message afterwards
-    const conversationsRef = collection(firestore, "conversations");
-    const q = query(conversationsRef, 
-      where("users", "array-contains-any", [userId, mainuser[0].userId])
-    );
-    const snapshotConversations = await getDocs(q);
-     snapshotConversations.docs.find((doc) => {
-      const users = doc.data().users;
-     if(users.includes(mainuser[0].userId) && users.includes(userId)) {
-      conversationsId= doc.id
-      setactuallmessageId(conversationsId) 
-      return true
-     }  
-    return false
-    });
-
- // referreing to the messages in this convid that we picked 
-   const messagesRef = collection(firestore, "conversations" , conversationsId, "messages")
-
-   const messagesQuery = query(messagesRef, orderBy('createdAt', 'asc'));
-   const messagesSnapshot = await getDocs(messagesQuery);
-   const messages = messagesSnapshot.docs.map(  (doc) => 
-     doc.data());
- 
-   // here is to get messages back after clicked on firend
-   setMessage(messages)
- 
-    
-    
-   setSelectedUserfunc(friend.find((f) => f.id === userId));
-   
-   
-    }
-
-
-    const DeleteFriendfromdatabase = async (friendId) => {
-      const userRef = doc(firestore, "users", mainuser[0].userId);
-      const friendsRef = collection(userRef, "friends");
-      const friendDocRef = doc(friendsRef, friendId);
-    
-      try {
-        await deleteDoc(friendDocRef);
-        console.log(`Friend with ID ${friendId} deleted successfully`);
-        setRender(rerender+1)
-      } catch (error) {
-        console.error(`Error deleting friend: ${error}`);
-      }
-    };
-    
-  
-    const TodisplayFriendsinChatsComponent = async (userId) => {
-      const userRef = doc(firestore, "users", userId);
-      const friendsRef = collection(userRef, "friends");
-      const snapshot = await getDocs(friendsRef);
-      const friendsData = snapshot.docs.map((doc) => {
-        const friendId = doc.id;
-      
-          const friendData = doc.data();
-        return {...friendData, id: friendId };
-      });
-      setFriendsInfo(friendsData); // here the link to dispaythem in chats component 
-      return friendsData;
-    };
-   
-    useEffect(() => {
-      if (mainuserRef.current && mainuserRef.current[0] && mainuserRef.current[0].userId) {
-      
-         TodisplayFriendsinChatsComponent(mainuserRef.current[0].userId).then((friendsData) => {
-      
-    });
-      }
-    }, [rerender]);
-
-  
-
-
-
-  return (
-   <>
-        <div className='chats' > 
-   
-   {(friend) ? (
-friend.map((chat) => (
-
- <div className={`userChat ${isBlackOverlay && highlightedUsers.includes(chat.id) ? 'highlight' : ''}`}
-   key={chat.id}
-   ref={(element) => clickedElementRef.current = element}
-   onClick={(e) => {
-     const element = e.target;
-     
-     if (element.classList.contains('highlight')) {
-       DeleteFriendfromdatabase(chat.id);
-     } else {
-       setSelectedUserfunc({
-         id: chat.id,
-         friendName: chat.friendName,
-         photo: chat.photo,
-         // add any other properties you want to store in selectedUser
-       });
-       toShowmessagederivedfromConversationAndSend(chat.id);
-     }
-   }}>
-
-       <div className="userChatInfo">
-         <span>{chat.friendName} </span>
-         <img src={chat.photo} alt="" />
-       </div>
-
-      
-
-
- </div>
-
-))
-) :null}
-    </div>
-    
-         </>
- )
-}
-export default Chats;
-
-
-/*import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '../components/UserContext';
 
-export const Chats = ({ highlightedUsers, isBlackOverlay }) => {
-  const { selectedUser, setSelectedUserfunc, friend, setFriendsInfo, setMessage, mainuser, rerender, setRender, setactuallmessageId } = useUser();
+
+
+export const Chats = ({ highlightedUsers, isBlackOverlay,setIsGroupChat }) => {
+
+  const { setSelectedUser,friend,setFriends, setMessage, message,
+  mainuser, rerender,socket, setRerender, setActuallMessageId,isGroupChat,selectedUser ,setShowCreateGroup, actuallmessagesId,selectedFriends,setSelectedFriends,setfriendUserTimestampSave,setmainUserTimeStampSave} = useUser();
   const mainuserRef = useRef(mainuser);
   const clickedElementRef = useRef(null);
+  const [isSelected, setIsSelected] = useState({});
 
-  const toShowmessagederivedfromConversationAndSend = async (userId) => {
-    try {
-      const response = await fetch(`/api/conversations/${mainuser[0].userId}/${userId}`);
-      const data = await response.json();
-      setactuallmessageId(data.conversationId);
-      setMessage(data.messages);
-      setSelectedUserfunc(friend.find((f) => f.id === userId));
-    } catch (error) {
-      console.error(`Error fetching messages: ${error}`);
+
+  const handleSelectFriend = (chat) => {
+    if (isSelected[chat.friendId]) {
+      setIsSelected((prevIsSelected) => ({ ...prevIsSelected, [chat.friendId]: false }));
+    } else {
+
+      setIsSelected((prevIsSelected) => ({ ...prevIsSelected, [chat.friendId]: true }));
+      
     }
   };
 
+  useEffect(() => {
+    mainuserRef.current = mainuser;
+    if (mainuserRef.current && mainuserRef.current.userId) {
+      console.log(mainuserRef.current.userId);
+    } else {
+      console.log('mainuserRef is not defined or empty');
+    }
+  }, [mainuser]);
+
+  useEffect(() => {
+    if (!socket) {
+      console.error('Socket is not initialized');
+      return;
+    }
+
+    socket.on('connect', () => {
+      console.log('Connected to WebSocket server');
+    });
+
+    /*socket.on('currentOnlineUsers', (onlineUsers) => {
+      console.log('Current online users:', onlineUsers);
+      setOnlineStatus(onlineUsers);
+    });*/
+
+    socket.on('updateUserStatus', ({ userId, isOnline }) => {
+      console.log(`User ${userId} is now ${isOnline ? 'online' : 'offline'}`);
+    
+      if (mainuserRef.current && mainuserRef.current[0] && mainuserRef.current[0].userId) {
+        TodisplayFriendsinChatsComponent(mainuserRef.current[0].userId);
+      }
+    });
+    return () => {
+      socket.off('currentOnlineUsers');
+      socket.off('updateUserStatus');
+    };
+ 
+  }, [socket]);  
+
+  const fetchAndDisplayConversationMessages = async (userId) => {
+    try {
+      console.log("am here")
+      console.log(userId);
+      const response = await fetch(`http://localhost:5000/api/auth/conversations/${mainuser[0].userId}/${userId[0].id}`);
+      
+      if (!response.ok) {
+        if (response.status === 500) {
+          console.log(`No conversation found for userId: ${userId[0].id}`);
+          setActuallMessageId(null); // Set to null or any appropriate value
+          setMessage([]); // Clear messages
+          return;
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      }
+      
+      const data = await response.json();
+      setActuallMessageId(data.conversationId);
+      console.log(actuallmessagesId);
+      const messagesWithSource = data.messages.map(message => ({
+        ...message,
+        source: 'chat'
+      }));
+      setMessage(messagesWithSource);
+      console.log(messagesWithSource);
+      setmainUserTimeStampSave(null)
+      setfriendUserTimestampSave(null)
+    } catch (error) {
+      console.error(`Error fetching messages: ${error}`);
+      setActuallMessageId(null); // Set to null or any appropriate value
+    }
+  };
+
+
+
+
+
+useEffect(() => {
+
+  if(selectedFriends){
+    fetchAndDisplayConversationMessages(selectedUser);
+  }
+  else{
+    setSelectedUser([])
+  }
+
+}, [selectedFriends]);
+
   const DeleteFriendfromdatabase = async (friendId) => {
     try {
-      await fetch(`/api/friends/${mainuser[0].userId}/${friendId}`, { method: 'DELETE' });
+      await fetch(`http://localhost:5000/api/auth/friends/${mainuserRef.current[0].userId}/${friendId}`, { method: 'DELETE' });
       console.log(`Friend with ID ${friendId} deleted successfully`);
-      setRender(rerender + 1);
+      setRerender(rerender + 1);
     } catch (error) {
       console.error(`Error deleting friend: ${error}`);
     }
   };
 
-  const TodisplayFriendsinChatsComponent = async (userId) => {
+  const TodisplayFriendsinChatsComponent = async (userId) => {  
     try {
-      const response = await fetch(`/api/friends/${userId}`);
+
+      const response = await fetch(`http://localhost:5000/api/auth/friends/${userId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const friendsData = await response.json();
-      setFriendsInfo(friendsData);
+      if (friendsData && friendsData.numberOfFriends > 0) {
+        setFriends(friendsData.friends);
+      } else {
+        console.log("No friends found.");
+      }
       return friendsData;
     } catch (error) {
       console.error(`Error fetching friends: ${error}`);
@@ -189,39 +144,90 @@ export const Chats = ({ highlightedUsers, isBlackOverlay }) => {
     }
   }, [rerender]);
 
+
+
+  /*useEffect(() => {
+    // Function to be called at each interval
+    const fetchData =  () => {
+      try {
+        
+ 
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    // Set up the interval
+    const intervalId = setInterval(fetchData, 5000); // 5000 ms = 5 seconds
+
+    // Clean up the interval on component unmount or when dependencies change
+    return () => clearInterval(intervalId);
+  }, [onlineStatus]); // Empty dependency array to run only once on component mount*/
+
+  const getStatusMessage = (status) => {
+    
+  
+    // Check for specific statuses
+    switch (status) {
+      case 'online':
+        return 'Online';
+      case 'away':
+        return 'Away';
+      case 'busy':
+        return 'Busy';
+      case 'doNotDisturb':
+        return 'Do Not Disturb';
+      case 'offline':
+        return 'Offline';
+      default:
+        // If status is a valid date string
+        let date = new Date(status);
+        if (!isNaN(date)) {
+          return `Offline since ${date.toLocaleString()}`;
+        } else {
+          // Default if no valid status or timestamp is available
+          return 'Unknown Status';
+        }
+    }
+  }
+  
   return (
-    <>
-      <div className='chats'>
-        {friend ? (
-          friend.map((chat) => (
-            <div
-              className={`userChat ${isBlackOverlay && highlightedUsers.includes(chat.id) ? 'highlight' : ''}`}
-              key={chat.id}
-              ref={(element) => clickedElementRef.current = element}
-              onClick={(e) => {
-                const element = e.target;
-                if (element.classList.contains('highlight')) {
-                  DeleteFriendfromdatabase(chat.id);
-                } else {
-                  setSelectedUserfunc({
-                    id: chat.id,
-                    friendName: chat.friendName,
-                    photo: chat.photo,
-                  });
-                  toShowmessagederivedfromConversationAndSend(chat.id);
-                }
-              }}
-            >
-              <div className="userChatInfo">
-                <span>{chat.friendName} </span>
-                <img src={chat.photo} alt="" />
-              </div>
+    <div className='chats'>
+      {friend ? (
+        friend.map((chat) => (
+          <div className={`userChat ${isBlackOverlay && highlightedUsers.includes(chat.friendId) ? 'highlight' : ''}`}
+               key={chat.friendId}
+               onClick={(e) => {
+                 const element = e.currentTarget;
+                 if (element.classList.contains('highlight')) {
+                   DeleteFriendfromdatabase(chat.friendId);
+                 } else {
+                   setSelectedUser([{
+                     id: chat.friendId,
+                     displayName: chat.friendName,
+                     photo: chat.photo,
+                     status: chat.status
+                   }]);
+                   handleSelectFriend(chat);
+                   setMessage([]);
+                   setSelectedFriends(prevToggle => !prevToggle);
+                 }
+               }}
+          >
+            <div className="userChatInfo">
+              <span>{chat.friendName}</span>
+              <img src={chat.photo} alt="" />
+              <span>{getStatusMessage(chat.status)}</span>
+              {isSelected[chat.friendId] && <span>Selected</span>}
             </div>
-          ))
-        ) : null}
-      </div>
-    </>
+          </div>
+        ))
+      ) : null}
+    </div>
   );
 };
 
-export default Chats;*/
+
+export default Chats;
+
+

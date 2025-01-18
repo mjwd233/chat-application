@@ -1,5 +1,5 @@
 
-.menu {
+/*.menu {
     background-color: Black;  
     padding: 0 20px;
     display: grid;
@@ -28,7 +28,7 @@
   }
   
   a {
-    color: white;
+    
     text-decoration: none;
   }
   
@@ -43,14 +43,15 @@
     background: url("https://images.unsplash.com/photo-1649250838629-c4462ccb817f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyOHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60") right;
   }
   .center {
-    /* background-color: darkgreen; */
+   
     background: url("https://images.unsplash.com/photo-1649180029015-80271a3c4d00?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60") no-repeat bottom;
   }
   .sideRight {
     background-color: darkblue;
     background: url("https://images.unsplash.com/photo-1649176405171-2f91c661b59e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60") bottom;
   }
-  .text {
+   .text {
+
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -64,7 +65,7 @@
   p button {
     background: transparent;
     border: 1px solid;
-    color: white;
+    
     padding: 7px 16px;
     text-align: center;
     text-decoration: none;
@@ -133,4 +134,4 @@
   @keyframes acceptbtn {
     from {background-color: transparent}
     to {background-color: red}
-  }
+  }*/

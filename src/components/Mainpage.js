@@ -26,12 +26,12 @@ return(
 
     <div className={styles.maincontainer} >
 
-        <div class={styles.logo}> 
+        <div className={styles.logo}> 
         <FontAwesomeIcon icon="fa-solid fa-house" />
         <span className={styles.spacingspan}>Casap</span>
         </div>
 
-        <nav class={styles.navlinks}>
+        <nav className={styles.navlinks}>
             <ul>
                 <li><FontAwesomeIcon icon="fa-regular fa-calendar" /><a href="#">Agenda</a></li>
                 <li><FontAwesomeIcon icon="fa-solid fa-house-lock" /><a href="#">Dossiers / Offres</a></li>
@@ -39,8 +39,8 @@ return(
             </ul>
         </nav>
 
-        <div class={styles.profile}>
-            <FontAwesomeIcon icon="fa-solid fa-bars"  class={styles.bars}/>
+        <div className={styles.profile}>
+            <FontAwesomeIcon icon="fa-solid fa-bars"  className={styles.bars}/>
             <img src="/images/newone.jpg" alt="Profile Icon"/>
         </div>
 
@@ -60,10 +60,10 @@ return(
             <div className={styles.searchthing}>🔍</div>
             <div className={styles.settings}>⚙️</div>
             <div className={styles.glock}>🔔</div>
-            <div class={styles.hamburgermenu}>
-                <div class={styles.bar}></div>
-                <div class={styles.bar}></div>
-                <div class={styles.bar}></div>
+            <div className={styles.hamburgermenu}>
+                <div className={styles.bar}></div>
+                <div className={styles.bar}></div>
+                <div className={styles.bar}></div>
                 Filters
             </div>
         </div>    
@@ -73,97 +73,97 @@ return(
 
     <div className={styles.sidebarundrightbar}>
 
-        <div class={styles.sidebar}>
+        <div className={styles.sidebar}>
        
             <div className={styles.sidebarcontent}>
 
-                <div class={styles.userinfo}>
-                     <div class={styles.symbol}>FE</div>
-                     <div class={styles.username}>Fabrice Edouard</div>
-                     <div class={styles.userstate}>Interested</div>
-                     <div class={styles.userdetails}>08:23</div>
+                <div className={styles.userinfo}>
+                     <div className={styles.symbol}>FE</div>
+                     <div className={styles.username}>Fabrice Edouard</div>
+                     <div className={styles.userstate}>Interested</div>
+                     <div className={styles.userdetails}>08:23</div>
                 </div>
 
-                <div class={styles.useravatar}>
-                    <div class={styles.avatr}> <span>User Address</span></div>
-                    <div class={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
-                    <div class={styles.chatsymbol}><span>&#x1F4AC;</span></div>
-                </div>
-
-            </div>
-
-            <div className={styles.sidebarcontent}>
-
-                <div class={styles.userinfo}>
-                     <div class={styles.symbol}>FE</div>
-                     <div class={styles.username}>Fabrice Edouard</div>
-                     <div class={styles.userstate}>Interested</div>
-                     <div class={styles.userdetails}>08:23</div>
-                </div>
-
-                <div class={styles.useravatar}>
-                     <div class={styles.avatr}> <span>User Address</span></div>
-                     <div class={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
-                     <div class={styles.chatsymbol}><span>&#x1F4AC;</span></div>
+                <div className={styles.useravatar}>
+                    <div className={styles.avatr}> <span>User Address</span></div>
+                    <div className={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
+                    <div className={styles.chatsymbol}><span>&#x1F4AC;</span></div>
                 </div>
 
             </div>
 
             <div className={styles.sidebarcontent}>
 
-                <div class={styles.userinfo}>
-                    <div class={styles.symbol}>FE</div>
-                    <div class={styles.username}>Fabrice Edouard</div>
-                    <div class={styles.userstate}>Interested</div>
-                    <div class={styles.userdetails}>08:23</div>
+                <div className={styles.userinfo}>
+                     <div className={styles.symbol}>FE</div>
+                     <div className={styles.username}>Fabrice Edouard</div>
+                     <div className={styles.userstate}>Interested</div>
+                     <div className={styles.userdetails}>08:23</div>
                 </div>
 
-                <div class={styles.useravatar}>
-                    <div class={styles.avatr}> <span>User Address</span></div>
-                    <div class={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
-                    <div class={styles.chatsymbol}><span>&#x1F4AC;</span></div>
+                <div className={styles.useravatar}>
+                     <div className={styles.avatr}> <span>User Address</span></div>
+                     <div className={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
+                     <div className={styles.chatsymbol}><span>&#x1F4AC;</span></div>
+                </div>
+
+            </div>
+
+            <div className={styles.sidebarcontent}>
+
+                <div className={styles.userinfo}>
+                    <div className={styles.symbol}>FE</div>
+                    <div className={styles.username}>Fabrice Edouard</div>
+                    <div className={styles.userstate}>Interested</div>
+                    <div className={styles.userdetails}>08:23</div>
+                </div>
+
+                <div className={styles.useravatar}>
+                    <div className={styles.avatr}> <span>User Address</span></div>
+                    <div className={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
+                    <div className={styles.chatsymbol}><span>&#x1F4AC;</span></div>
                 </div>
    
             </div>
 
             <div className={styles.sidebarcontent}>
 
-                <div class={styles.userinfo}>
-                    <div class={styles.symbol}>FE</div>
-                    <div class={styles.username}>Fabrice Edouard</div>
-                    <div class={styles.userstate}>Interested</div>
-                    <div class={styles.userdetails}>08:23</div>
+                <div className={styles.userinfo}>
+                    <div className={styles.symbol}>FE</div>
+                    <div className={styles.username}>Fabrice Edouard</div>
+                    <div className={styles.userstate}>Interested</div>
+                    <div className={styles.userdetails}>08:23</div>
                 </div>
 
-                <div class={styles.useravatar}>
-                    <div class={styles.avatr}> <span>User Address</span></div>
-                    <div class={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
-                    <div class={styles.chatsymbol}><span>&#x1F4AC;</span></div>
+                <div className={styles.useravatar}>
+                    <div className={styles.avatr}> <span>User Address</span></div>
+                    <div className={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
+                    <div className={styles.chatsymbol}><span>&#x1F4AC;</span></div>
                 </div>
    
             </div>
 
             <div className={styles.sidebarcontent}>
 
-                <div class={styles.userinfo}>
-                    <div class={styles.symbol}>FE</div>
-                    <div class={styles.username}>Fabrice Edouard</div>
-                    <div class={styles.userstate}>Interested</div>
-                    <div class={styles.userdetails}>08:23</div>
+                <div className={styles.userinfo}>
+                    <div className={styles.symbol}>FE</div>
+                    <div className={styles.username}>Fabrice Edouard</div>
+                    <div className={styles.userstate}>Interested</div>
+                    <div className={styles.userdetails}>08:23</div>
                 </div>
 
-                <div class={styles.useravatar}>
-                    <div class={styles.avatr}> <span>User Address</span></div>
-                    <div class={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
-                    <div class={styles.chatsymbol}><span>&#x1F4AC;</span></div>
+                <div className={styles.useravatar}>
+                    <div className={styles.avatr}> <span>User Address</span></div>
+                    <div className={styles.useraddress}>8 rue Lavoisier 75008 Paris</div>
+                    <div className={styles.chatsymbol}><span>&#x1F4AC;</span></div>
                 </div>
    
             </div>
 
 
-            <div class={styles.pagination}>
+            <div className={styles.pagination}>
                     <ul>
-                        <li><a href="" class={styles.active}>1</a></li>
+                        <li><a href="" className={styles.active}>1</a></li>
                         <li><a href="">2</a></li>
                         <li><a href="">3</a></li>
                         <li><a href="">4</a></li>
@@ -180,18 +180,18 @@ return(
 
             <div className={styles.iconsDiv}>
 
-                <div class={styles.con1}>
+                <div className={styles.con1}>
                     <span> <FontAwesomeIcon icon="fa-solid fa-xmark" /> </span>
                     <span> <FontAwesomeIcon icon="fa-solid fa-arrows-up-down" /></span>
                     <span> ▲</span>
                     <span> ▼</span>  
                 </div>
 
-                <div class={styles.con2}>
+                <div className={styles.con2}>
                     <h3>vor deateus cadndidnts (▲ ▼ pour navigator)</h3>
                 </div>
 
-                <div class={styles.con3}>
+                <div className={styles.con3}>
                     <h3>jeudi spetember 16:27</h3>
                     <span><FontAwesomeIcon icon="fa-solid fa-comment" className={styles.chatsymbols} /></span>
                     <span><FontAwesomeIcon icon="fa-solid fa-ellipsis" className={styles.fontcolor}/></span>
@@ -199,7 +199,7 @@ return(
 
             </div>
 
-            <div class={styles.topbar}>
+            <div className={styles.topbar}>
                 <h2>Location</h2>
                 <span>Salarie en CD</span>
                 <span>3200/.mois</span>
@@ -207,7 +207,7 @@ return(
 
             <h1> Gabrielle Arduino</h1>
 
-            <div class={styles.smoothbar}>
+            <div className={styles.smoothbar}>
                 <span><FontAwesomeIcon icon="fa-solid fa-bag-shopping"  /></span><p>planzier de rd</p>
                 <span><FontAwesomeIcon icon="fa-solid fa-folder" /></span><p>depot dossier</p>
                 <span><FontAwesomeIcon icon="fa-solid fa-download"/></span><p>Archiever</p>

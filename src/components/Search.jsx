@@ -10,8 +10,8 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const {selectedUser} = useUser();
  
-
-
+  
+  const user = selectedUser && selectedUser.length > 0 ? selectedUser[0] : null;
 
   return (
     <div className='search'>
@@ -24,13 +24,14 @@ const Search = () => {
 
          <button>Search</button> 
         </div> 
+      
         
-        {selectedUser  ? (
+        {user  ? (
         <div className="userChat">
           
           <div className="userChatInfo">
-          <img src={selectedUser.photo} alt="" />
-            <span>{selectedUser.friendName}</span>
+          <img src={user.photo} alt="" />
+            <span>{user.displayName}</span>
           </div>
         </div>
       ) : null}

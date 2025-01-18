@@ -29,7 +29,7 @@
 
     <div className={MyEditCss.sidebar}>
 
-    <div className={MyEditCss.profiledDiv}> account owner: <a> {mainuser[1].displayName}</a> </div>
+    <div className={MyEditCss.profiledDiv}> account owner: <a> {mainuser[0].displayName}</a> </div>
     
 
     </div>
@@ -39,11 +39,11 @@
     <form className={MyEditCss.forms} onSubmit={uploadPhoto}>
     
 
-    <div className={MyEditCss.maincontent__photo}> <img src={mainuser[1].photo} ></img></div>
+    <div className={MyEditCss.maincontent__photo}> <img src={mainuser[0].photo} ></img></div>
     <label>displayName</label>
     <input type='text' placeholder='username'  onChange={(e) => setName(e.target.value)}></input>
     <label>Change User Photo</label>
-    <input type='file' onchange={handlePhotoChange}></input>
+    <input type='file' onChange={handlePhotoChange}></input>
 
 
 

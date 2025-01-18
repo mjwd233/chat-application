@@ -3,38 +3,42 @@ import axios from 'axios';
 import { useUser } from '../components/UserContext';
 import UserDetailsCss from '../UserDetails.module.css';
 
+
+export const createConversation = async (mainuser,userId) => {
+  if (mainuser.length === 0) {
+    console.error("Main user not found");
+    return;
+  }
+
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/conversations', {
+      userId1: mainuser[0].userId,
+      userId2: userId,
+    });
+
+    if (response.data.newConversation) {
+      console.log("Conversation created successfully");
+    } else {
+      console.log("Conversation already exists");
+    }
+    return response.data; // Return the response data
+  } catch (error) {
+    console.error("Error creating conversation:", error);
+    return null; // Return null in case of an error
+  }
+};
+
 const UserDetails = ({ userId, onClose }) => {
   // Constants
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
-  const { mainuser, rerender, setRender } = useUser();
-
+  const { mainuser, rerender, setRerender } = useUser();
+console.log(mainuser)
   // Functions
-  const createConversation = async () => {
-    if (mainuser.length === 0) {
-      console.error("Main user not found");
-      return;
-    }
-
-    try {
-      const response = await axios.post('http://localhost:5000/api/conversations', {
-        userId1: mainuser[0].userId,
-        userId2: userId,
-      });
-
-      if (response.data.newConversation) {
-        console.log("Conversation created successfully");
-      } else {
-        console.log("Conversation already exists");
-      }
-    } catch (error) {
-      console.error("Error creating conversation:", error);
-    }
-  };
 
   const getUserByUserId = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
+      const response = await axios.get(`http://localhost:5000/api/auth/users/${userId}`);
       setUser(response.data);
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -61,8 +65,7 @@ const UserDetails = ({ userId, onClose }) => {
     }
 
     try {
-      await createConversation();
-      const response = await axios.post(`http://localhost:5000/api/users/${mainuser[0].userId}/friends`, {
+      const response = await axios.post(`http://localhost:5000/api/auth/users/${mainuser[0].userId}/friends`, {
         friendId: userId,
         friendName: user.displayName,
         photo: user.photoURL,
@@ -70,7 +73,7 @@ const UserDetails = ({ userId, onClose }) => {
 
       if (response.data.success) {
         console.log("Friend added successfully");
-        setRender(rerender + 1);
+        setRerender(rerender + 1);
       } else {
         console.error("Error adding friend:", response.data.message);
       }

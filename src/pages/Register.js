@@ -2,21 +2,23 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../components/UserContext';
+import GoogleLoginComponent from '../components/GoogleLoginComponent';
 
 const Register = () => {
   const defaultPhotoURL = '/images/newone.jpg';
-  const { mainuser, seTheMainUser } = useUser(); // id, photo, displayName
-
+  const { seTheMainUser } = useUser(); // id, photo, displayName
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const navigate = useNavigate();
 
+  console.log('Redirect Base URL:', process.env.REACT_APP_REDIRECT_BASE_URL);
+
   const handleSignUp = async (e) => {
     e.preventDefault(); // Prevent form submission
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
+      const response = await axios.post(`http://localhost:5000/api/auth/register`, {
         displayName,
         email,
         password,
@@ -25,14 +27,24 @@ const Register = () => {
 
       console.log('User created successfully!', response.data);
 
-      seTheMainUser([...mainuser, {
-        id: response.data.user.id, // Use the id from the response
-        displayName: response.data.user.displayName,
-        photo: response.data.user.photoURL,
-      }]);
-  
+      if (response && response.data) {  
 
-      navigate("/");
+        let token = response.data.token;
+
+        // Save the token to localStorage
+        localStorage.setItem('token', token);
+        token = localStorage.getItem('token');
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        seTheMainUser({
+          userId: response.data.user.id, // Use the id from the response
+          displayName: response.data.user.displayName,
+          photo: response.data.user.photoURL,
+        });
+
+        navigate("/verify-email-prompt"); // Navigate to the VerifyEmailPrompt component
+      } else {
+        console.error('Response or response.data is undefined');
+      }
     } catch (error) {
       console.error('Error creating user:', error.response.data);
     }
@@ -72,8 +84,9 @@ const Register = () => {
           <img src="" alt="" />
           <span>Add an avatar</span>
           <button onClick={handleSignUp}>Sign up</button>
+          <GoogleLoginComponent />
         </form>
-        <p>You do have an account?</p>
+        <p>Already have an account? <a href={`${process.env.REACT_APP_REDIRECT_BASE_URL}/login`}>Login</a></p>
       </div>
     </div>
   );
